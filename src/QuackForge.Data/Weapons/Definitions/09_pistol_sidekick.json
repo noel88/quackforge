@@ -1,0 +1,30 @@
+{
+  "id": "quackforge_weapon_pistol_sidekick",
+  "displayName": { "en": "Sidekick", "ko": "사이드킥" },
+  "category": "pistol",
+  "tier": 1,
+  "baseModel": "weapon_pistol_base",
+  "stats": {
+    "damage": 22,
+    "fireRate": 360,
+    "accuracy": 0.78,
+    "recoil": 0.18,
+    "magazineSize": 15,
+    "reloadTime": 1.4,
+    "range": 35
+  },
+  "ammoType": "9mm",
+  "weight": 1.1,
+  "price": 3200,
+  "dropRate": 0.08,
+  "craftingRecipe": {
+    "blueprintId": "quackforge_blueprint_pistol_sidekick",
+    "materials": [
+      { "itemId": "scrap_metal", "count": 5 },
+      { "itemId": "weapon_part_common", "count": 2 },
+      { "itemId": "gunpowder", "count": 3 }
+    ],
+    "workbenchTier": 1,
+    "craftTime": 45
+  }
+}

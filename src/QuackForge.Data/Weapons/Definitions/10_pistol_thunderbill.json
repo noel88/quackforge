@@ -1,0 +1,30 @@
+{
+  "id": "quackforge_weapon_pistol_thunderbill",
+  "displayName": { "en": "Thunderbill .50", "ko": "선더빌 .50" },
+  "category": "pistol",
+  "tier": 4,
+  "baseModel": "weapon_pistol_base",
+  "stats": {
+    "damage": 86,
+    "fireRate": 140,
+    "accuracy": 0.70,
+    "recoil": 0.72,
+    "magazineSize": 7,
+    "reloadTime": 2.2,
+    "range": 42
+  },
+  "ammoType": "50ae",
+  "weight": 2.4,
+  "price": 18600,
+  "dropRate": 0.01,
+  "craftingRecipe": {
+    "blueprintId": "quackforge_blueprint_pistol_thunderbill",
+    "materials": [
+      { "itemId": "scrap_metal", "count": 14 },
+      { "itemId": "weapon_part_rare", "count": 4 },
+      { "itemId": "gunpowder", "count": 9 }
+    ],
+    "workbenchTier": 2,
+    "craftTime": 135
+  }
+}

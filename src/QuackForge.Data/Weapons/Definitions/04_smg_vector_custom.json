@@ -1,0 +1,30 @@
+{
+  "id": "quackforge_weapon_smg_vector_custom",
+  "displayName": { "en": "Vector Custom", "ko": "벡터 커스텀" },
+  "category": "smg",
+  "tier": 3,
+  "baseModel": "weapon_smg_base",
+  "stats": {
+    "damage": 32,
+    "fireRate": 1100,
+    "accuracy": 0.72,
+    "recoil": 0.35,
+    "magazineSize": 33,
+    "reloadTime": 2.2,
+    "range": 45
+  },
+  "ammoType": "9mm",
+  "weight": 2.6,
+  "price": 12500,
+  "dropRate": 0.02,
+  "craftingRecipe": {
+    "blueprintId": "quackforge_blueprint_smg_vector_custom",
+    "materials": [
+      { "itemId": "scrap_metal", "count": 10 },
+      { "itemId": "weapon_part_rare", "count": 3 },
+      { "itemId": "gunpowder", "count": 8 }
+    ],
+    "workbenchTier": 2,
+    "craftTime": 110
+  }
+}

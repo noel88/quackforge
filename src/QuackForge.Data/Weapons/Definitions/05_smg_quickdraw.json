@@ -1,0 +1,30 @@
+{
+  "id": "quackforge_weapon_smg_quickdraw",
+  "displayName": { "en": "Quickdraw SMG", "ko": "퀵드로우 SMG" },
+  "category": "smg",
+  "tier": 2,
+  "baseModel": "weapon_smg_base",
+  "stats": {
+    "damage": 26,
+    "fireRate": 950,
+    "accuracy": 0.68,
+    "recoil": 0.30,
+    "magazineSize": 25,
+    "reloadTime": 1.6,
+    "range": 40
+  },
+  "ammoType": "9mm",
+  "weight": 2.2,
+  "price": 7200,
+  "dropRate": 0.05,
+  "craftingRecipe": {
+    "blueprintId": "quackforge_blueprint_smg_quickdraw",
+    "materials": [
+      { "itemId": "scrap_metal", "count": 8 },
+      { "itemId": "weapon_part_common", "count": 3 },
+      { "itemId": "gunpowder", "count": 5 }
+    ],
+    "workbenchTier": 1,
+    "craftTime": 75
+  }
+}

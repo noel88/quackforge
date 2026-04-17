@@ -1,0 +1,30 @@
+{
+  "id": "quackforge_weapon_ar_duckstorm",
+  "displayName": { "en": "Duckstorm AR", "ko": "덕스톰 AR" },
+  "category": "ar",
+  "tier": 4,
+  "baseModel": "weapon_ar_base",
+  "stats": {
+    "damage": 52,
+    "fireRate": 760,
+    "accuracy": 0.74,
+    "recoil": 0.42,
+    "magazineSize": 40,
+    "reloadTime": 3.1,
+    "range": 85
+  },
+  "ammoType": "7.62x39",
+  "weight": 4.1,
+  "price": 22500,
+  "dropRate": 0.008,
+  "craftingRecipe": {
+    "blueprintId": "quackforge_blueprint_ar_duckstorm",
+    "materials": [
+      { "itemId": "scrap_metal", "count": 22 },
+      { "itemId": "weapon_part_rare", "count": 5 },
+      { "itemId": "gunpowder", "count": 12 }
+    ],
+    "workbenchTier": 2,
+    "craftTime": 160
+  }
+}

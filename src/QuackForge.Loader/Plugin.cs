@@ -3,6 +3,7 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using QuackForge.Core;
+using QuackForge.Data.Weapons;
 
 namespace QuackForge.Loader
 {
@@ -14,6 +15,7 @@ namespace QuackForge.Loader
         public const string PluginVersion = "0.0.1";
 
         public static ManualLogSource Log { get; private set; } = null!;
+        public static WeaponRegistry Weapons { get; private set; } = null!;
 
         private Harmony _harmony = null!;
         private ConfigEntry<bool> _enableMod = null!;
@@ -35,6 +37,9 @@ namespace QuackForge.Loader
             }
 
             QfCore.Initialize(Log, Config);
+
+            Weapons = new WeaponRegistry();
+            Weapons.LoadAll();
 
             _harmony = new Harmony(PluginGuid);
             _harmony.PatchAll();

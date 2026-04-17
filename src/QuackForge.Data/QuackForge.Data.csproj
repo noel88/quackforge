@@ -2,27 +2,27 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyName>QuackForge.Loader</AssemblyName>
-    <RootNamespace>QuackForge.Loader</RootNamespace>
+    <AssemblyName>QuackForge.Data</AssemblyName>
+    <RootNamespace>QuackForge.Data</RootNamespace>
     <Version>0.0.1</Version>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <RestoreAdditionalProjectSources>https://nuget.bepinex.dev/v3/index.json</RestoreAdditionalProjectSources>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="BepInEx.Core" Version="5.4.21" />
-    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" PrivateAssets="all" />
-    <PackageReference Include="HarmonyX" Version="2.10.2" />
-    <PackageReference Include="UnityEngine.Modules" Version="2022.3.5" IncludeAssets="compile" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\QuackForge.Core\QuackForge.Core.csproj" />
-    <ProjectReference Include="..\QuackForge.Data\QuackForge.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Weapons\Definitions\*.json" />
   </ItemGroup>
 
 </Project>

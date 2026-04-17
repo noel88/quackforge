@@ -1,0 +1,31 @@
+{
+  "id": "quackforge_weapon_sr_quackshot",
+  "displayName": { "en": "Quackshot SR", "ko": "쿽샷 SR" },
+  "category": "sniper",
+  "tier": 4,
+  "baseModel": "weapon_sr_base",
+  "stats": {
+    "damage": 165,
+    "fireRate": 55,
+    "accuracy": 0.96,
+    "recoil": 0.55,
+    "magazineSize": 5,
+    "reloadTime": 3.8,
+    "range": 180
+  },
+  "ammoType": "7.62x54r",
+  "weight": 5.4,
+  "price": 32000,
+  "dropRate": 0.005,
+  "craftingRecipe": {
+    "blueprintId": "quackforge_blueprint_sr_quackshot",
+    "materials": [
+      { "itemId": "scrap_metal", "count": 20 },
+      { "itemId": "weapon_part_rare", "count": 6 },
+      { "itemId": "optic_lens_precision", "count": 1 },
+      { "itemId": "gunpowder", "count": 10 }
+    ],
+    "workbenchTier": 3,
+    "craftTime": 240
+  }
+}
