@@ -1,0 +1,30 @@
+{
+  "id": "quackforge_weapon_sg_scattergun",
+  "displayName": { "en": "Scattergun", "ko": "스캐터건" },
+  "category": "shotgun",
+  "tier": 2,
+  "baseModel": "weapon_sg_base",
+  "stats": {
+    "damage": 84,
+    "fireRate": 150,
+    "accuracy": 0.58,
+    "recoil": 0.62,
+    "magazineSize": 6,
+    "reloadTime": 3.2,
+    "range": 18
+  },
+  "ammoType": "12ga_buck",
+  "weight": 3.8,
+  "price": 8900,
+  "dropRate": 0.04,
+  "craftingRecipe": {
+    "blueprintId": "quackforge_blueprint_sg_scattergun",
+    "materials": [
+      { "itemId": "scrap_metal", "count": 10 },
+      { "itemId": "weapon_part_common", "count": 3 },
+      { "itemId": "gunpowder", "count": 7 }
+    ],
+    "workbenchTier": 1,
+    "craftTime": 100
+  }
+}

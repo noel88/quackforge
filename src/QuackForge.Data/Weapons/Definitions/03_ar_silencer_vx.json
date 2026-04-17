@@ -1,0 +1,31 @@
+{
+  "id": "quackforge_weapon_ar_silencer_vx",
+  "displayName": { "en": "Silencer VX", "ko": "사일렌서 VX" },
+  "category": "ar",
+  "tier": 3,
+  "baseModel": "weapon_ar_base",
+  "stats": {
+    "damage": 42,
+    "fireRate": 620,
+    "accuracy": 0.88,
+    "recoil": 0.22,
+    "magazineSize": 25,
+    "reloadTime": 2.7,
+    "range": 90
+  },
+  "ammoType": "5.56x45",
+  "weight": 3.6,
+  "price": 16400,
+  "dropRate": 0.018,
+  "craftingRecipe": {
+    "blueprintId": "quackforge_blueprint_ar_silencer_vx",
+    "materials": [
+      { "itemId": "scrap_metal", "count": 14 },
+      { "itemId": "weapon_part_rare", "count": 3 },
+      { "itemId": "suppressor_kit", "count": 1 },
+      { "itemId": "gunpowder", "count": 8 }
+    ],
+    "workbenchTier": 2,
+    "craftTime": 140
+  }
+}

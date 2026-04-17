@@ -1,0 +1,30 @@
+{
+  "id": "quackforge_weapon_ar_ranger",
+  "displayName": { "en": "Ranger AR", "ko": "레인저 AR" },
+  "category": "ar",
+  "tier": 2,
+  "baseModel": "weapon_ar_base",
+  "stats": {
+    "damage": 38,
+    "fireRate": 680,
+    "accuracy": 0.82,
+    "recoil": 0.28,
+    "magazineSize": 30,
+    "reloadTime": 2.6,
+    "range": 80
+  },
+  "ammoType": "5.56x45",
+  "weight": 3.4,
+  "price": 9800,
+  "dropRate": 0.04,
+  "craftingRecipe": {
+    "blueprintId": "quackforge_blueprint_ar_ranger",
+    "materials": [
+      { "itemId": "scrap_metal", "count": 12 },
+      { "itemId": "weapon_part_common", "count": 4 },
+      { "itemId": "gunpowder", "count": 6 }
+    ],
+    "workbenchTier": 1,
+    "craftTime": 90
+  }
+}

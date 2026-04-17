@@ -55,13 +55,30 @@ deploy() {
     err "Build output missing: $loader"
     exit 1
   fi
+  local duckov_managed="$DUCKOV_DIR/Duckov.app/Contents/Resources/Data/Managed"
   mkdir -p "$PLUGINS_DIR"
   local count=0
-  for dll in "$BUILD_OUTPUT"/QuackForge.*.dll; do
+  for dll in "$BUILD_OUTPUT"/*.dll; do
     [[ -f "$dll" ]] || continue
-    cp "$dll" "$PLUGINS_DIR/"
-    log "deployed → $PLUGINS_DIR/$(basename "$dll")"
-    count=$((count + 1))
+    local base
+    base=$(basename "$dll")
+    case "$base" in
+      QuackForge.*.dll)
+        cp "$dll" "$PLUGINS_DIR/"
+        log "deployed → $base"
+        count=$((count + 1))
+        ;;
+      *)
+        # Ship third-party deps only if the game doesn't already provide them
+        # (avoids type-forwarding conflicts with Mono runtime assemblies).
+        if [[ -f "$duckov_managed/$base" ]]; then
+          continue
+        fi
+        cp "$dll" "$PLUGINS_DIR/"
+        log "dep      → $base"
+        count=$((count + 1))
+        ;;
+    esac
   done
   log "$count DLLs deployed"
 }

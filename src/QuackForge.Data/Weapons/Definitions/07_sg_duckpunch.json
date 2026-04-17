@@ -1,0 +1,30 @@
+{
+  "id": "quackforge_weapon_sg_duckpunch",
+  "displayName": { "en": "Duckpunch 12", "ko": "덕펀치 12" },
+  "category": "shotgun",
+  "tier": 4,
+  "baseModel": "weapon_sg_base",
+  "stats": {
+    "damage": 132,
+    "fireRate": 90,
+    "accuracy": 0.52,
+    "recoil": 0.82,
+    "magazineSize": 4,
+    "reloadTime": 4.1,
+    "range": 22
+  },
+  "ammoType": "12ga_slug",
+  "weight": 5.1,
+  "price": 24800,
+  "dropRate": 0.006,
+  "craftingRecipe": {
+    "blueprintId": "quackforge_blueprint_sg_duckpunch",
+    "materials": [
+      { "itemId": "scrap_metal", "count": 24 },
+      { "itemId": "weapon_part_rare", "count": 6 },
+      { "itemId": "gunpowder", "count": 14 }
+    ],
+    "workbenchTier": 3,
+    "craftTime": 200
+  }
+}
