@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyName>QuackForge.Loader</AssemblyName>
-    <RootNamespace>QuackForge.Loader</RootNamespace>
+    <AssemblyName>QuackForge.Core</AssemblyName>
+    <RootNamespace>QuackForge.Core</RootNamespace>
     <Version>0.0.1</Version>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
@@ -14,13 +14,6 @@
 
   <ItemGroup>
     <PackageReference Include="BepInEx.Core" Version="5.4.21" />
-    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" PrivateAssets="all" />
-    <PackageReference Include="HarmonyX" Version="2.10.2" />
-    <PackageReference Include="UnityEngine.Modules" Version="2022.3.5" IncludeAssets="compile" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\QuackForge.Core\QuackForge.Core.csproj" />
   </ItemGroup>
 
 </Project>

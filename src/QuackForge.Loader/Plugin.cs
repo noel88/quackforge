@@ -2,6 +2,7 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using QuackForge.Core;
 
 namespace QuackForge.Loader
 {
@@ -32,6 +33,8 @@ namespace QuackForge.Loader
                 Log.LogWarning($"{PluginName} is disabled via config (General.EnableMod = false).");
                 return;
             }
+
+            QfCore.Initialize(Log, Config);
 
             _harmony = new Harmony(PluginGuid);
             _harmony.PatchAll();

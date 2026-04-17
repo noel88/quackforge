@@ -50,14 +50,20 @@ build() {
 }
 
 deploy() {
-  local dll="$BUILD_OUTPUT/QuackForge.Loader.dll"
-  if [[ ! -f "$dll" ]]; then
-    err "Build output missing: $dll"
+  local loader="$BUILD_OUTPUT/QuackForge.Loader.dll"
+  if [[ ! -f "$loader" ]]; then
+    err "Build output missing: $loader"
     exit 1
   fi
   mkdir -p "$PLUGINS_DIR"
-  cp "$dll" "$PLUGINS_DIR/"
-  log "deployed → $PLUGINS_DIR/QuackForge.Loader.dll"
+  local count=0
+  for dll in "$BUILD_OUTPUT"/QuackForge.*.dll; do
+    [[ -f "$dll" ]] || continue
+    cp "$dll" "$PLUGINS_DIR/"
+    log "deployed → $PLUGINS_DIR/$(basename "$dll")"
+    count=$((count + 1))
+  done
+  log "$count DLLs deployed"
 }
 
 run_once() {
