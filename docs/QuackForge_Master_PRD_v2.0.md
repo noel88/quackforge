@@ -156,7 +156,7 @@
 | Git | 2.40+ | (이미 설치됨) | 버전 관리 |
 | fswatch | latest | `brew install fswatch` | watch 모드 자동 빌드 |
 | Steam + 덕코프 | — | (Steam에서 설치) | Mac 네이티브 실행 |
-| BepInEx 5 (unix x64) | 5.4.21 | GitHub Releases | 모드 로더 |
+| BepInEx 5 (macOS universal) | 5.4.23.5 | GitHub Releases | 모드 로더 (arm64 네이티브 지원) |
 
 ### Rider vs VS Code
 
@@ -177,24 +177,66 @@
 
 ### BepInEx 설치 절차 (Mac)
 
+> **변경 이력 (2026-04-17)**: PRD v2.0 초판의 `BepInEx_unix_x64_5.4.21` 은 Apple Silicon arm64 덕코프(Universal Binary) 에 로드 불가 (dyld 아키텍처 불일치, R0-2 실증). BepInEx 5.4.23.5 macos_universal 로 전환했으나, **Apple Silicon arm64 네이티브 실행에서 MonoMod/HarmonyX 의 런타임 패칭이 preloader 이후 진행되지 않는 현상 추가 발견** → 게임을 **Rosetta (x86_64 슬라이스)** 로 실행하는 런처 스크립트로 해결. macOS SIP가 `arch` 경계에서 `DYLD_INSERT_LIBRARIES` 를 제거하므로, 중간에 bash 래퍼를 두어 Rosetta 후 DYLD 재주입.
+
+자동 설치:
+
+```bash
+./scripts/install-bepinex-mac.sh
+```
+
+수동 동등:
+
 ```bash
 DUCKOV="$HOME/Library/Application Support/Steam/steamapps/common/Escape From Duckov"
 cd "$DUCKOV"
 
-# 1. BepInEx_unix_x64_5.4.21.zip 다운로드 (GitHub Releases)
-unzip ~/Downloads/BepInEx_unix_x64_5.4.21.zip
+# 1. BepInEx 5.4.23.5 macos_universal 다운로드
+gh release download v5.4.23.5 --repo BepInEx/BepInEx -p "BepInEx_macos_universal_5.4.23.5.zip"
+unzip BepInEx_macos_universal_5.4.23.5.zip
 
-# 2. 실행 권한 부여
+# 2. run_bepinex.sh executable_name 설정 + 실행 권한
+sed -i '' 's|executable_name=""|executable_name="Duckov.app"|' run_bepinex.sh
 chmod +x run_bepinex.sh
 
-# 3. macOS 차단 플래그 제거
-xattr -cr "$DUCKOV"
+# 3. macOS Gatekeeper 플래그 제거
+xattr -cr BepInEx libdoorstop.dylib run_bepinex.sh
 
-# 4. 첫 실행 (BepInEx 폴더 자동 생성 트리거)
-./run_bepinex.sh
+# 4. Steam DRM 우회 (Steamworks.NET RestartAppIfNecessary)
+printf "3167020" > steam_appid.txt
 ```
 
-확인: `BepInEx/LogOutput.log` 에 BepInEx 로드 메시지가 보여야 함.
+실행:
+
+```bash
+./scripts/run-duckov-mac.sh   # arch -x86_64 + bash wrapper + DYLD 재주입
+```
+
+**확인**: `BepInEx/LogOutput.log` 에 다음 메시지가 보여야 함.
+
+```
+[Message:   BepInEx] BepInEx 5.4.23.5 - Duckov
+[Info   :   BepInEx] Running under Unity vUnknown (post-2017)
+[Message:   BepInEx] Preloader started
+[Info   :   BepInEx] Detected Unity version: v2022.3.62f2
+[Message:   BepInEx] Chainloader startup complete
+```
+
+### 런타임 주의
+
+| 항목 | 값 |
+|---|---|
+| Unity 버전 (게임 빌드) | 2022.3.62f2 (PRD 초판 2022.3.5f1 에서 게임 업데이트됨) |
+| Mac 덕코프 바이너리 | Universal Binary (x86_64 + arm64), ad-hoc 코드서명 |
+| 실행 아키텍처 | **x86_64 (Rosetta)** — arm64 는 BepInEx 5 미지원 |
+| Steam AppID | 3167020 (`steam_appid.txt` 필요) |
+
+### NuGet 컴파일 참조 vs 런타임
+
+| 구성요소 | 버전 | 이유 |
+|---|---|---|
+| `BepInEx.Core` (NuGet, csproj) | 5.4.21 | BepInEx NuGet 피드의 stable 최신. 5.4.x 내 API 호환 |
+| `BepInEx` (런타임 바이너리) | 5.4.23.5 macos_universal | 최신 doorstop, universal dylib |
 
 ## 2.3 Windows VM QA 환경
 
