@@ -1,0 +1,10 @@
+{
+  "id": "quackforge_blueprint_sg_scattergun",
+  "displayName": { "en": "Blueprint: Scattergun", "ko": "도면: 스캐터건" },
+  "unlocksWeapon": "quackforge_weapon_sg_scattergun",
+  "unlockConditions": {
+    "minPlayerLevel": 6,
+    "dropSources": []
+  },
+  "consumeOnUse": false
+}

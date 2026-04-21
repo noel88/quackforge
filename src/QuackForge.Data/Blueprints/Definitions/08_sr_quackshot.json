@@ -1,0 +1,13 @@
+{
+  "id": "quackforge_blueprint_sr_quackshot",
+  "displayName": { "en": "Blueprint: Quackshot SR", "ko": "도면: 쿽샷 SR" },
+  "unlocksWeapon": "quackforge_weapon_sr_quackshot",
+  "unlockConditions": {
+    "minPlayerLevel": 20,
+    "dropSources": [
+      { "enemy": "boss_cliff_sentinel", "chance": 0.08 },
+      { "challenge": "boss_rush_cliff", "guaranteed": true }
+    ]
+  },
+  "consumeOnUse": false
+}

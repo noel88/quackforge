@@ -1,0 +1,12 @@
+{
+  "id": "quackforge_blueprint_ar_silencer_vx",
+  "displayName": { "en": "Blueprint: Silencer VX", "ko": "도면: 사일렌서 VX" },
+  "unlocksWeapon": "quackforge_weapon_ar_silencer_vx",
+  "unlockConditions": {
+    "minPlayerLevel": 12,
+    "dropSources": [
+      { "enemy": "boss_farm_king", "chance": 0.15 }
+    ]
+  },
+  "consumeOnUse": false
+}

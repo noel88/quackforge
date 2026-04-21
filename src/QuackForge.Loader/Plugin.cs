@@ -4,6 +4,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using QuackForge.Core;
 using QuackForge.Data.Armors;
+using QuackForge.Data.Blueprints;
 using QuackForge.Data.Weapons;
 
 namespace QuackForge.Loader
@@ -18,6 +19,7 @@ namespace QuackForge.Loader
         public static ManualLogSource Log { get; private set; } = null!;
         public static WeaponRegistry Weapons { get; private set; } = null!;
         public static ArmorRegistry Armors { get; private set; } = null!;
+        public static BlueprintRegistry Blueprints { get; private set; } = null!;
 
         private Harmony _harmony = null!;
         private ConfigEntry<bool> _enableMod = null!;
@@ -45,6 +47,10 @@ namespace QuackForge.Loader
 
             Armors = new ArmorRegistry();
             Armors.LoadAll();
+
+            var core = QfCore.Instance!;
+            Blueprints = new BlueprintRegistry(core.Events, core.Save);
+            Blueprints.LoadAll();
 
             _harmony = new Harmony(PluginGuid);
             _harmony.PatchAll();

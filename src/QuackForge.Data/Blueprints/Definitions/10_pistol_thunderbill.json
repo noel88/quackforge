@@ -1,0 +1,12 @@
+{
+  "id": "quackforge_blueprint_pistol_thunderbill",
+  "displayName": { "en": "Blueprint: Thunderbill .50", "ko": "도면: 선더빌 .50" },
+  "unlocksWeapon": "quackforge_weapon_pistol_thunderbill",
+  "unlockConditions": {
+    "minPlayerLevel": 15,
+    "dropSources": [
+      { "enemy": "boss_subway_baron", "chance": 0.14 }
+    ]
+  },
+  "consumeOnUse": true
+}
