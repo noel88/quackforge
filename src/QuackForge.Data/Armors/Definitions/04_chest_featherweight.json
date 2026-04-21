@@ -1,0 +1,16 @@
+{
+  "id": "quackforge_armor_chest_featherweight",
+  "displayName": { "en": "Featherweight Wrap", "ko": "페더웨이트 랩" },
+  "slot": "chest",
+  "tier": 2,
+  "baseModel": "armor_light_vest",
+  "stats": {
+    "protection": 22,
+    "penetrationResistance": 0.30,
+    "weightPenalty": 0.4,
+    "movementPenalty": -0.12,
+    "staminaBonus": 0.22
+  },
+  "durability": 110,
+  "repairCost": 380
+}

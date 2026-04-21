@@ -1,0 +1,16 @@
+{
+  "id": "quackforge_armor_head_nightowl_helm",
+  "displayName": { "en": "Nightowl Helm", "ko": "나이트아울 헬름" },
+  "slot": "head",
+  "tier": 3,
+  "baseModel": "armor_tactical_helmet",
+  "stats": {
+    "protection": 62,
+    "penetrationResistance": 0.55,
+    "weightPenalty": 0.9,
+    "movementPenalty": 0.02,
+    "staminaBonus": 0.0
+  },
+  "durability": 140,
+  "repairCost": 720
+}

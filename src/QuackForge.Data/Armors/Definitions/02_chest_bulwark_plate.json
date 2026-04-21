@@ -1,0 +1,16 @@
+{
+  "id": "quackforge_armor_chest_bulwark_plate",
+  "displayName": { "en": "Bulwark Plate", "ko": "벌워크 플레이트" },
+  "slot": "chest",
+  "tier": 4,
+  "baseModel": "armor_heavy_plate",
+  "stats": {
+    "protection": 92,
+    "penetrationResistance": 0.85,
+    "weightPenalty": 5.4,
+    "movementPenalty": 0.18,
+    "staminaBonus": -0.08
+  },
+  "durability": 320,
+  "repairCost": 2100
+}

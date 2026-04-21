@@ -1,0 +1,16 @@
+{
+  "id": "quackforge_armor_backpack_scavenger",
+  "displayName": { "en": "Scavenger's Rig", "ko": "스캐빈저 리그" },
+  "slot": "backpack",
+  "tier": 3,
+  "baseModel": "armor_utility_rig",
+  "stats": {
+    "protection": 12,
+    "penetrationResistance": 0.15,
+    "weightPenalty": 1.8,
+    "movementPenalty": 0.04,
+    "staminaBonus": 0.08
+  },
+  "durability": 200,
+  "repairCost": 640
+}
