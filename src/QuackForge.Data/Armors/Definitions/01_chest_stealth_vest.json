@@ -1,0 +1,16 @@
+{
+  "id": "quackforge_armor_chest_stealth_vest",
+  "displayName": { "en": "Stealth Vest", "ko": "은폐 조끼" },
+  "slot": "chest",
+  "tier": 3,
+  "baseModel": "armor_tactical_vest",
+  "stats": {
+    "protection": 45,
+    "penetrationResistance": 0.6,
+    "weightPenalty": 1.2,
+    "movementPenalty": -0.05,
+    "staminaBonus": 0.10
+  },
+  "durability": 180,
+  "repairCost": 850
+}
