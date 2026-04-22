@@ -21,7 +21,9 @@ PROJ_DIR="$REPO_ROOT/src/QuackForge.TestMod"
 BUILD_OUTPUT="$PROJ_DIR/bin/Release"
 
 DUCKOV_DIR="${DUCKOV_DIR:-$HOME/Library/Application Support/Steam/steamapps/common/Escape From Duckov}"
-MODS_DIR="$DUCKOV_DIR/Duckov.app/Contents/Resources/Data/Mods"
+# 덕코프의 Application.dataPath 는 <app>/Contents/ 를 반환하므로 Mods 는 그 바로 아래.
+# (일반 Unity Mac 빌드의 <app>/Contents/Resources/Data/ 와 다름 — 이 게임 고유 동작)
+MODS_DIR="$DUCKOV_DIR/Duckov.app/Contents/Mods"
 TARGET_DIR="$MODS_DIR/quackforge_test"
 
 SKIP_BUILD=0
