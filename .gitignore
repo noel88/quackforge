@@ -30,3 +30,36 @@ dist/
 global.json
 .env
 .env.local
+
+# Unity project — generated / user-specific directories
+unity-project/[Ll]ibrary/
+unity-project/[Tt]emp/
+unity-project/[Oo]bj/
+unity-project/[Bb]uild/
+unity-project/[Bb]uilds/
+unity-project/[Ll]ogs/
+unity-project/[Uu]ser[Ss]ettings/
+unity-project/[Mm]emoryCaptures/
+unity-project/[Rr]ecordings/
+
+# Unity — auto-generated sln/csproj (IDE use). Not needed in repo.
+unity-project/*.csproj
+unity-project/*.sln
+unity-project/*.pidb.meta
+unity-project/*.pdb.meta
+unity-project/*.mdb.meta
+
+# Unity — editor/crash artifacts
+unity-project/sysinfo.txt
+unity-project/crashlytics-build.properties
+unity-project/*.apk
+unity-project/*.aab
+unity-project/*.unitypackage
+unity-project/*.app
+unity-project/.vsconfig
+
+# Unity — built AssetBundles (large, regenerated)
+unity-project/AssetBundles/
+
+# Unity Hub leftovers
+unity-project/[Tt]estRunner/
