@@ -23,15 +23,18 @@ namespace QuackForge.Core
             Save = save;
         }
 
-        public static QfCore Initialize(ManualLogSource rootLog, ConfigFile configFile)
+        public static QfCore Initialize(ManualLogSource rootLog, ConfigFile configFile, string? saveFilePath = null)
         {
             if (Instance != null) throw new InvalidOperationException("QfCore already initialized.");
             if (rootLog == null) throw new ArgumentNullException(nameof(rootLog));
             if (configFile == null) throw new ArgumentNullException(nameof(configFile));
 
             QfLogger.Init(rootLog);
-            Instance = new QfCore(new QfConfig(configFile), new QfEventBus(), new QfSaveContext());
-            QfLogger.For("Core").Info("QfCore initialized.");
+            Instance = new QfCore(new QfConfig(configFile), new QfEventBus(), new QfSaveContext(saveFilePath));
+            var log = QfLogger.For("Core");
+            log.Info(saveFilePath == null
+                ? "QfCore initialized (in-memory save)"
+                : $"QfCore initialized (save → {saveFilePath})");
             return Instance;
         }
     }
