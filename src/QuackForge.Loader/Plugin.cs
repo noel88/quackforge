@@ -14,7 +14,9 @@ namespace QuackForge.Loader
     {
         public const string PluginGuid = "com.returntrue.quackforge";
         public const string PluginName = "QuackForge";
-        public const string PluginVersion = "0.0.1";
+        // BepInPlugin attribute 는 numeric System.Version 만 허용하므로 alpha suffix 는
+        // 생략. 실 릴리즈 태그는 v0.1.0-alpha.1 (CHANGELOG 및 git tag 참조).
+        public const string PluginVersion = "0.1.0";
 
         public static ManualLogSource Log { get; private set; } = null!;
         public static WeaponRegistry Weapons { get; private set; } = null!;

@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>QuackForge.Core</AssemblyName>
     <RootNamespace>QuackForge.Core</RootNamespace>
-    <Version>0.0.1</Version>
+    <Version>0.1.0-alpha.1</Version>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
