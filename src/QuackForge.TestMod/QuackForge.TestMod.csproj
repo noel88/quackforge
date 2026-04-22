@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    최소 공식 모드 엔트리포인트 (#65 실증용).
+
+    산출물: bin/Release/quackforge_test.dll
+    배포 경로: <Duckov.app>/Contents/Resources/Data/Mods/quackforge_test/
+               ├── info.ini
+               └── quackforge_test.dll
+
+    덕코프 ModManager 가:
+      Assembly.LoadFrom(...).GetType("quackforge_test.ModBehaviour")
+    를 호출하므로 AssemblyName = quackforge_test 로 고정 (케이스 민감).
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>quackforge_test</AssemblyName>
+    <RootNamespace>quackforge_test</RootNamespace>
+    <Version>0.1.0</Version>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="UnityEngine.Modules" Version="2022.3.5" IncludeAssets="compile" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="TeamSoda.Duckov.Core">
+      <HintPath>$(DuckovManagedPath)\TeamSoda.Duckov.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DuckovManagedPath Condition="'$(DUCKOV_MANAGED_PATH)' != ''">$(DUCKOV_MANAGED_PATH)</DuckovManagedPath>
+    <DuckovManagedPath Condition="'$(DuckovManagedPath)' == ''">$(HOME)/Library/Application Support/Steam/steamapps/common/Escape From Duckov/Duckov.app/Contents/Resources/Data/Managed</DuckovManagedPath>
+  </PropertyGroup>
+
+</Project>
