@@ -24,6 +24,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Weapons\Definitions\*.json" />
     <EmbeddedResource Include="Armors\Definitions\*.json" />
+    <EmbeddedResource Include="Blueprints\Definitions\*.json" />
   </ItemGroup>
 
 </Project>

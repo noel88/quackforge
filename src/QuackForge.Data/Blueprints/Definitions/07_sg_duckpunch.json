@@ -1,0 +1,13 @@
+{
+  "id": "quackforge_blueprint_sg_duckpunch",
+  "displayName": { "en": "Blueprint: Duckpunch 12", "ko": "도면: 덕펀치 12" },
+  "unlocksWeapon": "quackforge_weapon_sg_duckpunch",
+  "unlockConditions": {
+    "minPlayerLevel": 22,
+    "dropSources": [
+      { "enemy": "boss_depot_titan", "chance": 0.10 },
+      { "challenge": "boss_rush_depot", "guaranteed": true }
+    ]
+  },
+  "consumeOnUse": false
+}

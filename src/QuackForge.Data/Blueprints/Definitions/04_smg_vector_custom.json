@@ -1,0 +1,13 @@
+{
+  "id": "quackforge_blueprint_smg_vector_custom",
+  "displayName": { "en": "Blueprint: Vector Custom", "ko": "도면: 벡터 커스텀" },
+  "unlocksWeapon": "quackforge_weapon_smg_vector_custom",
+  "unlockConditions": {
+    "minPlayerLevel": 10,
+    "dropSources": [
+      { "enemy": "boss_farm_king", "chance": 0.15 },
+      { "challenge": "boss_rush_farm", "guaranteed": true }
+    ]
+  },
+  "consumeOnUse": false
+}

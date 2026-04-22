@@ -1,0 +1,13 @@
+{
+  "id": "quackforge_blueprint_ar_duckstorm",
+  "displayName": { "en": "Blueprint: Duckstorm AR", "ko": "도면: 덕스톰 AR" },
+  "unlocksWeapon": "quackforge_weapon_ar_duckstorm",
+  "unlockConditions": {
+    "minPlayerLevel": 18,
+    "dropSources": [
+      { "enemy": "boss_warehouse_overlord", "chance": 0.12 },
+      { "challenge": "boss_rush_warehouse", "guaranteed": true }
+    ]
+  },
+  "consumeOnUse": false
+}

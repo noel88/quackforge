@@ -1,0 +1,10 @@
+{
+  "id": "quackforge_blueprint_pistol_sidekick",
+  "displayName": { "en": "Blueprint: Sidekick", "ko": "도면: 사이드킥" },
+  "unlocksWeapon": "quackforge_weapon_pistol_sidekick",
+  "unlockConditions": {
+    "minPlayerLevel": 1,
+    "dropSources": []
+  },
+  "consumeOnUse": false
+}

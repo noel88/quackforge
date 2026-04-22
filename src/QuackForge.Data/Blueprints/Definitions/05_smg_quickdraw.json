@@ -1,0 +1,10 @@
+{
+  "id": "quackforge_blueprint_smg_quickdraw",
+  "displayName": { "en": "Blueprint: Quickdraw SMG", "ko": "도면: 퀵드로우 SMG" },
+  "unlocksWeapon": "quackforge_weapon_smg_quickdraw",
+  "unlockConditions": {
+    "minPlayerLevel": 4,
+    "dropSources": []
+  },
+  "consumeOnUse": false
+}

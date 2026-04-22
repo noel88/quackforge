@@ -1,0 +1,10 @@
+{
+  "id": "quackforge_blueprint_ar_ranger",
+  "displayName": { "en": "Blueprint: Ranger AR", "ko": "도면: 레인저 AR" },
+  "unlocksWeapon": "quackforge_weapon_ar_ranger",
+  "unlockConditions": {
+    "minPlayerLevel": 3,
+    "dropSources": []
+  },
+  "consumeOnUse": false
+}
