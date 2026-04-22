@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\QuackForge.Core\QuackForge.Core.csproj" />
     <ProjectReference Include="..\QuackForge.Data\QuackForge.Data.csproj" />
+    <ProjectReference Include="..\QuackForge.Progression\QuackForge.Progression.csproj" />
   </ItemGroup>
 
 </Project>

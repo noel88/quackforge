@@ -6,6 +6,7 @@ using QuackForge.Core;
 using QuackForge.Data.Armors;
 using QuackForge.Data.Blueprints;
 using QuackForge.Data.Weapons;
+using QuackForge.Progression;
 
 namespace QuackForge.Loader
 {
@@ -22,6 +23,7 @@ namespace QuackForge.Loader
         public static WeaponRegistry Weapons { get; private set; } = null!;
         public static ArmorRegistry Armors { get; private set; } = null!;
         public static BlueprintRegistry Blueprints { get; private set; } = null!;
+        public static QfProgression Progression { get; private set; } = null!;
 
         private Harmony _harmony = null!;
         private ConfigEntry<bool> _enableMod = null!;
@@ -55,7 +57,11 @@ namespace QuackForge.Loader
             Blueprints.LoadAll();
 
             _harmony = new Harmony(PluginGuid);
-            _harmony.PatchAll();
+            _harmony.PatchAll(typeof(Plugin).Assembly);
+            _harmony.PatchAll(typeof(QfProgression).Assembly);
+
+            // Harmony 패치가 Progression.Patches.* 를 등록한 뒤 Progression 초기화 (순서 의존 없음).
+            Progression = QfProgression.Initialize(pointsPerLevel: 1, autoAllocateVit: true);
 
             Log.LogInfo($"\ud83e\udd86 {PluginName} is awake. Forging begins. (v{PluginVersion})");
         }

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuackForge.Core", "src\Quac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuackForge.Data", "src\QuackForge.Data\QuackForge.Data.csproj", "{C6056E9D-9406-4D95-9A28-F762D9AF893F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuackForge.Progression", "src\QuackForge.Progression\QuackForge.Progression.csproj", "{5C652F35-C866-4F85-A694-23EB34E8730D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,18 @@ Global
 		{C6056E9D-9406-4D95-9A28-F762D9AF893F}.Release|x64.Build.0 = Release|Any CPU
 		{C6056E9D-9406-4D95-9A28-F762D9AF893F}.Release|x86.ActiveCfg = Release|Any CPU
 		{C6056E9D-9406-4D95-9A28-F762D9AF893F}.Release|x86.Build.0 = Release|Any CPU
+		{5C652F35-C866-4F85-A694-23EB34E8730D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C652F35-C866-4F85-A694-23EB34E8730D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C652F35-C866-4F85-A694-23EB34E8730D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5C652F35-C866-4F85-A694-23EB34E8730D}.Debug|x64.Build.0 = Debug|Any CPU
+		{5C652F35-C866-4F85-A694-23EB34E8730D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5C652F35-C866-4F85-A694-23EB34E8730D}.Debug|x86.Build.0 = Debug|Any CPU
+		{5C652F35-C866-4F85-A694-23EB34E8730D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C652F35-C866-4F85-A694-23EB34E8730D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C652F35-C866-4F85-A694-23EB34E8730D}.Release|x64.ActiveCfg = Release|Any CPU
+		{5C652F35-C866-4F85-A694-23EB34E8730D}.Release|x64.Build.0 = Release|Any CPU
+		{5C652F35-C866-4F85-A694-23EB34E8730D}.Release|x86.ActiveCfg = Release|Any CPU
+		{5C652F35-C866-4F85-A694-23EB34E8730D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,5 +78,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{02EE985A-1D28-4574-AC4B-460CD9A92254} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{C6056E9D-9406-4D95-9A28-F762D9AF893F} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{5C652F35-C866-4F85-A694-23EB34E8730D} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal
