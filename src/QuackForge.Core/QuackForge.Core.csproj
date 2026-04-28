@@ -14,7 +14,20 @@
 
   <ItemGroup>
     <PackageReference Include="BepInEx.Core" Version="5.4.21" />
-    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
+
+  <ItemGroup>
+    <!-- 게임이 이미 포함한 Newtonsoft.Json 참조. System.Text.Json 의 Utf8JsonWriter
+         가 Mono(Rosetta) 에서 VTable setup 실패하는 이슈 회피 (Phase 2 QA round 7). -->
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(DuckovManagedPath)\Newtonsoft.Json.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DuckovManagedPath Condition="'$(DUCKOV_MANAGED_PATH)' != ''">$(DUCKOV_MANAGED_PATH)</DuckovManagedPath>
+    <DuckovManagedPath Condition="'$(DuckovManagedPath)' == ''">$(HOME)/Library/Application Support/Steam/steamapps/common/Escape From Duckov/Duckov.app/Contents/Resources/Data/Managed</DuckovManagedPath>
+  </PropertyGroup>
 
 </Project>

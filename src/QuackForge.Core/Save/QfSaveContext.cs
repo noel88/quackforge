@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.Json;
+using Newtonsoft.Json;
 using QuackForge.Core.Logging;
 
 namespace QuackForge.Core.Save
@@ -21,10 +21,12 @@ namespace QuackForge.Core.Save
     // 복잡한 객체 (Dictionary<Enum, int> 등) 도 동작하도록 JsonSerializer 에 위임.
     public sealed class QfSaveContext
     {
-        private static readonly JsonSerializerOptions JsonOpts = new()
+        // Newtonsoft.Json: System.Text.Json.Utf8JsonWriter 가 Mono(Rosetta) 에서
+        // VTable setup 실패하는 이슈 회피 (Phase 2 QA round 7).
+        // 게임이 이미 Newtonsoft.Json.dll 을 포함하므로 추가 종속성 없음.
+        private static readonly JsonSerializerSettings JsonOpts = new()
         {
-            WriteIndented = true,
-            IncludeFields = true,
+            Formatting = Formatting.Indented,
         };
 
         private readonly string? _filePath;
@@ -48,7 +50,7 @@ namespace QuackForge.Core.Save
         public void Set<T>(string key, T value)
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("key required", nameof(key));
-            var json = JsonSerializer.Serialize(value, typeof(T), JsonOpts);
+            var json = JsonConvert.SerializeObject(value, typeof(T), JsonOpts);
             lock (_lock)
             {
                 _store[key] = new Entry { TypeName = SimpleTypeName(typeof(T)), Json = json };
@@ -65,7 +67,7 @@ namespace QuackForge.Core.Save
                 {
                     try
                     {
-                        var parsed = JsonSerializer.Deserialize<T>(entry.Json, JsonOpts);
+                        var parsed = JsonConvert.DeserializeObject<T>(entry.Json, JsonOpts);
                         if (parsed != null)
                         {
                             value = parsed;
@@ -123,7 +125,7 @@ namespace QuackForge.Core.Save
                 if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
 
                 var tmp = _filePath + ".tmp";
-                var payload = JsonSerializer.Serialize(new FileFormat { Version = 1, Entries = snapshot }, JsonOpts);
+                var payload = JsonConvert.SerializeObject(new FileFormat { Version = 1, Entries = snapshot }, JsonOpts);
                 File.WriteAllText(tmp, payload);
                 if (File.Exists(_filePath)) File.Delete(_filePath);
                 File.Move(tmp, _filePath);
@@ -145,7 +147,7 @@ namespace QuackForge.Core.Save
             try
             {
                 var payload = File.ReadAllText(_filePath);
-                var parsed = JsonSerializer.Deserialize<FileFormat>(payload, JsonOpts);
+                var parsed = JsonConvert.DeserializeObject<FileFormat>(payload, JsonOpts);
                 if (parsed?.Entries == null) return;
 
                 lock (_lock)
