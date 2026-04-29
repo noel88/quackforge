@@ -11,7 +11,7 @@ namespace QuackForge.Progression.Patches
     // 해결: DamageAction 실행 스코프 동안 thread-static 플래그를 켜고, 그 동안엔
     // Health.MaxHealth getter 가 우리 보너스를 빼서 반환 (HealthMaxHealthDamageScopePatch).
     // Prefix 에서 set, Finalizer 에서 clear (예외 시에도 안전).
-    [HarmonyPatch("Duckov.Effects.DamageAction", "OnTriggeredPositive")]
+    [HarmonyPatch(typeof(Duckov.Effects.DamageAction), "OnTriggeredPositive")]
     public static class DamageActionPatch
     {
         [System.ThreadStatic]
