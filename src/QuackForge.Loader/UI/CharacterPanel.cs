@@ -20,6 +20,7 @@ namespace QuackForge.Loader.UI
     public sealed class CharacterPanel : MonoBehaviour
     {
         private static CharacterPanel? _instance;
+        public static CharacterPanel? Instance => _instance;
 
         private readonly IQfLog _log = QfLogger.For("UI.CharacterPanel");
 

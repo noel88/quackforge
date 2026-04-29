@@ -294,6 +294,7 @@ namespace QuackForge.Loader
 
             CharacterPanel.Attach(runtime, Progression, QfCore.Instance!.Events, _characterPanelKey);
             LevelUpNotification.Attach(runtime, QfCore.Instance!.Events, _levelUpNotificationEnabled);
+            CharacterTabInjector.Initialize();
 
             Log.LogInfo($"🦆 {PluginName} runtime attached (trigger={trigger}). Forging begins.");
         }
