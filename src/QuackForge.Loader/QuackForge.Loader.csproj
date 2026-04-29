@@ -32,6 +32,11 @@
       <HintPath>$(DuckovManagedPath)\UnityEngine.UI.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <!-- TeamSoda.Duckov.Core: ViewTabs / ViewTabDisplayEntry / ManagedUIElement 인젝트용 (#32 PR B). -->
+    <Reference Include="TeamSoda.Duckov.Core">
+      <HintPath>$(DuckovManagedPath)\TeamSoda.Duckov.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
 
   <PropertyGroup>
