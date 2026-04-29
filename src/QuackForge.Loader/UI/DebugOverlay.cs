@@ -33,6 +33,8 @@ namespace QuackForge.Loader.UI
             if (_instance != null) return;
 
             var go = new GameObject("QuackForgeDebugOverlay");
+            // HideAndDontSave: Duckov 부팅 sweep 회피 (Plugin.AttachRuntime 주석 참조).
+            go.hideFlags = HideFlags.HideAndDontSave;
             DontDestroyOnLoad(go);
             _instance = go.AddComponent<DebugOverlay>();
             _instance._progression = progression;

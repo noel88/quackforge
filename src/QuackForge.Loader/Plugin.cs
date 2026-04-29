@@ -7,10 +7,11 @@ using QuackForge.Core;
 using QuackForge.Data.Armors;
 using QuackForge.Data.Blueprints;
 using QuackForge.Data.Weapons;
+using QuackForge.Loader.Runtime;
 using QuackForge.Loader.UI;
 using QuackForge.Progression;
-using QuackForge.Progression.Debug;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace QuackForge.Loader
 {
@@ -29,14 +30,16 @@ namespace QuackForge.Loader
         public static BlueprintRegistry Blueprints { get; private set; } = null!;
         public static QfProgression Progression { get; private set; } = null!;
 
-        private Harmony _harmony = null!;
+        // Harmony 인스턴스는 static. Plugin GameObject 가 죽어도 패치 자체는
+        // AppDomain 어셈블리에 살아남으므로 UnpatchSelf 를 호출하지 않는다.
+        private static Harmony? _harmony;
+        private static bool _runtimeAttached;
+
         private ConfigEntry<bool> _enableMod = null!;
         private ConfigEntry<bool> _debugOverlayEnabled = null!;
         private ConfigEntry<KeyboardShortcut> _debugAddXpKey = null!;
         private ConfigEntry<int> _debugAddXpAmount = null!;
         private ConfigEntry<float> _saveFlushIntervalSec = null!;
-
-        private float _nextFlushAt;
 
         private void Awake()
         {
@@ -98,36 +101,67 @@ namespace QuackForge.Loader
             // Harmony 패치가 Progression.Patches.* 를 등록한 뒤 Progression 초기화 (순서 의존 없음).
             Progression = QfProgression.Initialize(pointsPerLevel: 1, autoAllocateVit: true);
 
-            if (_debugOverlayEnabled.Value) DebugOverlay.Attach(this, Progression, core.Events);
+            // Phase 2 QA 발견:
+            //   Plugin GameObject 는 Duckov 부팅 막바지에 destroy 될 수 있다.
+            //   Plugin.Awake 시점엔 활성 scene 이 없어 DontDestroyOnLoad 도 무효.
+            //   매 프레임 로직(F9 키바인드, save flush) + DebugOverlay 는
+            //   첫 frame 이 돈 후에 별도 persistent host 로 attach.
+            //
+            //   Duckov 가 자체 mod 로더로 scene 을 갈아끼우면서 SceneManager.sceneLoaded
+            //   이벤트를 안 발화하는 케이스 (Round 3 확인) 가 있어 Update() fallback 도 둠.
+            //   둘 중 먼저 발화하는 쪽이 attach.
+            // Round 5 진단 발견:
+            //   Plugin GameObject 가 Awake → OnEnable → 즉시 OnDisable (active=False) 패턴.
+            //   Duckov 부팅 단계에서 BepInEx host GO 에 SetActive(false) 가 호출됨.
+            //   destroy 는 안 되지만 Update/Coroutine 도 안 돌고 sceneLoaded 도 못 받음.
+            //
+            //   해결: Awake 끝에서 즉시 별도 host GO 생성 + HideFlags.HideAndDontSave.
+            //   HideAndDontSave 는 Unity 의 unused asset cleanup / scene sweep 에서
+            //   GameObject 를 제외하므로 boot sweep 을 회피한다.
+            //   (BepInEx 5.4.21+ chainloader 가 동일 이유로 사용하는 패턴)
+            AttachRuntime("Awake");
 
-            _nextFlushAt = Time.realtimeSinceStartup + _saveFlushIntervalSec.Value;
+            // sceneLoaded fallback 은 유지 (host 도 어떻게든 죽으면 다음 scene 에서 재시도).
+            SceneManager.sceneLoaded += OnSceneLoaded;
 
-            Log.LogInfo($"\ud83e\udd86 {PluginName} is awake. Forging begins. (v{PluginVersion})");
+            Log.LogInfo($"🦆 {PluginName} bootstrapped (v{PluginVersion}).");
         }
 
-        private void Update()
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (_enableMod == null || !_enableMod.Value) return;
+            if (_runtimeAttached) return;
+            AttachRuntime($"sceneLoaded:{scene.name}");
+        }
 
-            // Debug: AddXp 키바인드
-            if (_debugAddXpKey != null && _debugAddXpKey.Value.IsDown())
+        private void AttachRuntime(string trigger)
+        {
+            if (_runtimeAttached) return;
+            _runtimeAttached = true;
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+
+            var host = new GameObject("QuackForge.Runtime");
+            // HideAndDontSave 가 boot sweep 회피의 핵심.
+            host.hideFlags = HideFlags.HideAndDontSave;
+            DontDestroyOnLoad(host);
+
+            var runtime = host.AddComponent<QfRuntime>();
+            runtime.Init(_debugAddXpKey, _debugAddXpAmount, _saveFlushIntervalSec);
+
+            if (_debugOverlayEnabled.Value)
             {
-                DebugCommands.AddXp(_debugAddXpAmount.Value);
+                DebugOverlay.Attach(runtime, Progression, QfCore.Instance!.Events);
             }
 
-            // 주기적 사이드카 flush
-            if (Time.realtimeSinceStartup >= _nextFlushAt)
-            {
-                QfCore.Instance?.Save.FlushIfDirty();
-                _nextFlushAt = Time.realtimeSinceStartup + _saveFlushIntervalSec.Value;
-            }
+            Log.LogInfo($"🦆 {PluginName} runtime attached (trigger={trigger}). Forging begins.");
         }
 
         private void OnDestroy()
         {
-            _harmony?.UnpatchSelf();
-            QfCore.Instance?.Save.FlushIfDirty();
-            Log?.LogInfo($"{PluginName} unloaded.");
+            // Plugin GameObject 는 Duckov 부팅 막바지에 destroy 되지만,
+            // 실제 런타임은 QfRuntime / DebugOverlay 별도 host 에 살아있으므로
+            // Harmony.UnpatchSelf 호출하지 않음 (패치를 살려둬야 함).
+            // sceneLoaded 미연결 상태면 cleanup.
+            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
         private static string ResolveSaveFilePath()
