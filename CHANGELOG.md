@@ -2,6 +2,58 @@
 
 All notable changes to QuackForge are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versioning follows [SemVer](https://semver.org/).
 
+## [0.3.0-alpha.1] — 2026-04-29
+
+Phase 3 closeout. UI 통합 + 9종 Harmony 패치 + 설정 확장 + Modifier 시스템 마이그레이션. v0.2.0 의 MaxHealth percent-damage 부작용 (#35 IT2 발견) 해결.
+
+### Added
+- **`docs/reverse-engineering/ui.md`** (#29) — Duckov 의 UI 스택 (UGUI / View / ViewTabs) RE.
+- **`docs/stat-balance.md`** (#30) — 5종 스탯 효과량 + 게임 stat 매핑.
+- **9종 Harmony Postfix → Modifier 시스템 마이그레이션** (#31, #88):
+  - VIT (`MaxHealth`) / STR (`MaxWeight`, `MeleeDamageMultiplier`) / AGI (`MaxStamina`, `Moveability`) / PRE (`RecoilControl`, `GunScatterMultiplier`) / SUR (`HealGain`, `EnergyCost`, `WaterCost`)
+  - 초기 v0.2.0 패턴(개별 게터 Postfix) 9개를 게임의 `ItemStatsSystem.Modifier` 정식 등록으로 통일 (#88).
+  - PercentageMultiply 계열에 floor 가드 (50pt 시 음수 방지).
+- **`StatModifierBinder`** (#88): MainCharacter 변경 자동 감지 + 자동 unbind/rebind. raid 진입/탈출/캐릭터 교체 케이스 처리.
+- **`CharacterPanel` UGUI** (#83): 코드로 빌드한 5-stat 분배 UI. host GameObject `HideAndDontSave` 보호. 토글 키 `[Debug] CharacterPanelKey` (default U).
+- **`LevelUpNotification`** UnityUI (#85): 화면 중앙 "LEVEL UP!" + 우상단 "+N pts" 1.5초 + 1.0초 페이드. cursor lock 비간섭 (raycastTarget=false).
+- **`CharacterTabInjector`** (#87): 게임 ViewTabs 에 "Char" 탭 동적 추가 (Harmony-free, clone-existing-entry 패턴). Button 강제 추가 fallback.
+- **`StatManager.Deallocate` / `ResetAllocation`** (#83, #84): [-] 버튼 + 리스팩 정책 가드 (`AllowFreeRespec`).
+- **`ProgressionSettings`** (#84): 진보 관련 모든 값 한 객체로 + 10 ConfigEntry (`PointsPerLevel`, `MaxPointsPerStat`, `AllowFreeRespec`, `HpPerVit` + 효과량 6종).
+- **`DamageActionPatch`** (#88): `Duckov.Effects.DamageAction.OnTriggeredPositive` Prefix + Finalizer (예외 안전 ThreadStatic flag).
+
+### Fixed
+- **MaxHealth percent-damage debuff 부작용** (#35 IT2):
+  - v0.2.0 의 `Health.MaxHealth` getter Postfix 가 우리 보너스 합산 → 게임의 `DamageAction.OnTriggeredPositive` 의 percent-damage 계산 (`damageValue = percent × MaxHealth × layers`) 까지 증폭 → raid 중 출혈/감염 디버프 효과 가속.
+  - **Fix**: Modifier 시스템으로 통합 (보너스는 `stat.Value` 에 정상 반영) + DamageAction 스코프 동안 ThreadStatic flag 켜고 `Health.MaxHealth` getter 가 우리 보너스 빼서 반환 (1 floor 안전).
+  - IT5 라운드에서 `DamageAction Prefix #N` 호출 + `VitBonus` 정확 우회 검증.
+- **Char 탭 click 미작동** (#35 IT1):
+  - 게임 `ViewTabDisplayEntry` prefab 이 IPointerClickHandler 별도 컴포넌트를 쓰는 케이스 → `GetComponentInChildren<Button>` 못 찾음.
+  - **Fix** (#88 IT2): clone 에 Button 없으면 강제로 root 에 Button + 투명 Image (raycastTarget) 추가.
+- **DebugOverlay IMGUI cursor lock 충돌** (#77):
+  - `OverlayEnabled` default `true` → `false` 로 변경 (#85). v0.4 에서 완전 제거 예정.
+  - LevelUpNotification + CharacterPanel 이 IMGUI overlay 의 토스트/스탯 표시 역할 흡수.
+
+### Changed
+- **`QuackForge.Loader.csproj`**: `UnityEngine.UI` + `TeamSoda.Duckov.Core` 직접 참조 (UGUI + ViewTabs 인젝트용).
+- **`QfProgression.Initialize` 시그니처**: `(int, bool)` → `(ProgressionSettings)` (null 이면 기본값) (#84).
+- **9개 stat patch 파일 → 1 Binder + 2 patches** (#88). 코드량 약 50% 감소.
+
+### Errata (v0.2.0-alpha.1)
+- v0.2.0 의 known issue "VIT 분배 시 percent damage 비례 증폭" 가 사실은 **Health.MaxHealth getter 가산 패턴의 자연 부작용** 이었음. v0.3.0 에서 Modifier 시스템 마이그레이션으로 해결.
+
+### Known Issues / Deferred
+- **1/10 stat 등록 실패** (`Stats.Binder] bound to MainCharacter (9/10 stats)` 로그). MeleeDamageMultiplier 추정 — 게임이 무기 stat 으로 분리해 character item 에 없음. 무기 들었을 때만 적용. 별도 PR.
+- **무기/방어구 게임 내 spawn 미구현**: Phase 3 까지 데이터/UI/스탯만. AssetBundle 경로 (#65) 후속.
+- **Character UI 인디케이터 동기화 안 됨**: 우리 panel 이 `ManagedUIElement` 비상속 → 다른 탭과 active 상태 동기화 X. 후속.
+- **Windows VM cross-platform 미검증**: PR #88 의 fix 가 BepInEx win_x64 에서도 동일 동작하는지 별도 검증 필요.
+
+### Migration from v0.2.0-alpha.1
+- cfg 새 항목 (`[Progression]` 4개 + `[Effects]` 7개 + `[Debug] CharacterPanelKey` / `LevelUpNotificationEnabled`) 자동 생성 (BepInEx default).
+- `[Debug] OverlayEnabled` 기존 값 유지 (default `false` 로 변경됐지만 cfg 에 이미 있는 사용자는 그대로). 권장: 명시적으로 `false`.
+- 사이드카 `quackforge.json` 포맷 호환. VIT 분배 그대로 복원.
+
+[0.3.0-alpha.1]: https://github.com/noel88/quackforge/releases/tag/v0.3.0-alpha.1
+
 ## [0.2.0-alpha.1] — 2026-04-29
 
 Phase 2 closeout. Hybrid leveling 체인이 인게임에서 처음으로 동작. v0.1.0 의 **잘못 진단된 known issue** ("게임 종료 직후 unloaded") 가 사실은 부팅 단계의 Plugin GameObject sweep 이었음을 발견하고 fix.
