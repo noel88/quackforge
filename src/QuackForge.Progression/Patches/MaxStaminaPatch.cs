@@ -10,11 +10,12 @@ namespace QuackForge.Progression.Patches
     [HarmonyPatch(typeof(CharacterMainControl), nameof(CharacterMainControl.MaxStamina), MethodType.Getter)]
     public static class MaxStaminaPatch
     {
-        public const float StaminaPerAgi = 3f;
+        public static float StaminaPerAgi { get; set; } = 3f;
 
         private static StatManager? _stats;
 
         public static void BindStats(StatManager stats) => _stats = stats;
+        public static void BindConfig(float staminaPerAgi) => StaminaPerAgi = staminaPerAgi;
 
         [HarmonyPostfix]
         public static void Postfix(CharacterMainControl __instance, ref float __result)
