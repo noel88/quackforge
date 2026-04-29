@@ -37,6 +37,7 @@ namespace QuackForge.Loader
 
         private ConfigEntry<bool> _enableMod = null!;
         private ConfigEntry<bool> _debugOverlayEnabled = null!;
+        private ConfigEntry<bool> _levelUpNotificationEnabled = null!;
         private ConfigEntry<KeyboardShortcut> _debugAddXpKey = null!;
         private ConfigEntry<int> _debugAddXpAmount = null!;
         private ConfigEntry<float> _saveFlushIntervalSec = null!;
@@ -71,8 +72,16 @@ namespace QuackForge.Loader
             _debugOverlayEnabled = Config.Bind(
                 "Debug",
                 "OverlayEnabled",
+                false,
+                "DEPRECATED (issue #77): the IMGUI overlay breaks cursor lock during raids. " +
+                "Default OFF as of v0.3+. Use the UGUI Character panel + LevelUpNotification instead. " +
+                "Will be removed in v0.4.");
+
+            _levelUpNotificationEnabled = Config.Bind(
+                "Debug",
+                "LevelUpNotificationEnabled",
                 true,
-                "Show the IMGUI overlay (level-up toast + stat summary). Disable for release-like playtest.");
+                "Show the centered LEVEL UP! UnityUI overlay on level-up (replaces IMGUI toast).");
 
             _debugAddXpKey = Config.Bind(
                 "Debug",
@@ -244,6 +253,7 @@ namespace QuackForge.Loader
             }
 
             CharacterPanel.Attach(runtime, Progression, QfCore.Instance!.Events, _characterPanelKey);
+            LevelUpNotification.Attach(runtime, QfCore.Instance!.Events, _levelUpNotificationEnabled);
 
             Log.LogInfo($"🦆 {PluginName} runtime attached (trigger={trigger}). Forging begins.");
         }
