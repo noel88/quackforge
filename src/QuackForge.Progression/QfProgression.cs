@@ -1,7 +1,6 @@
 using System;
 using QuackForge.Core;
 using QuackForge.Core.Logging;
-using QuackForge.Progression.Patches;
 using QuackForge.Progression.Stats;
 using QuackForge.Progression.Xp;
 
@@ -14,14 +13,16 @@ namespace QuackForge.Progression
         public StatManager Stats { get; }
         public XpSubscriber XpSubscriber { get; }
         public ProgressionSettings Settings { get; }
+        public StatModifierBinder Binder { get; }
 
         private readonly IQfLog _log = QfLogger.For("Progression");
 
-        private QfProgression(StatManager stats, XpSubscriber xp, ProgressionSettings settings)
+        private QfProgression(StatManager stats, XpSubscriber xp, ProgressionSettings settings, StatModifierBinder binder)
         {
             Stats = stats;
             XpSubscriber = xp;
             Settings = settings;
+            Binder = binder;
         }
 
         public static QfProgression Initialize(ProgressionSettings? settings = null)
@@ -40,39 +41,18 @@ namespace QuackForge.Progression
             var xp = new XpSubscriber(stats, settings.PointsPerLevel);
             xp.Subscribe();
 
-            // 모든 패치에 stat 바인딩 + 효과량 cfg 바인딩.
-            HealthMaxHealthPatch.BindStats(stats);
-            HealthMaxHealthPatch.BindConfig(settings.HpPerVit);
-            MaxWeightPatch.BindStats(stats);
-            MaxWeightPatch.BindConfig(settings.WeightPerStr);
-            MaxStaminaPatch.BindStats(stats);
-            MaxStaminaPatch.BindConfig(settings.StaminaPerAgi);
-            CharacterMoveabilityPatch.BindStats(stats);
-            CharacterMoveabilityPatch.BindConfig(settings.MoveabilityPerAgiPct);
-            RecoilControlPatch.BindStats(stats);
-            RecoilControlPatch.BindConfig(settings.RecoilControlPerPre);
-            HealGainPatch.BindStats(stats);
-            HealGainPatch.BindConfig(settings.HealGainPerSurPct);
-            // 잔여 4종 (#31 PR B)
-            MeleeDamageMultiplierPatch.BindStats(stats);
-            MeleeDamageMultiplierPatch.BindConfig(settings.MeleeDamagePerStrPct);
-            GunScatterMultiplierPatch.BindStats(stats);
-            GunScatterMultiplierPatch.BindConfig(settings.ScatterReducePerPrePct, settings.ScatterFloor);
-            EnergyCostPerMinPatch.BindStats(stats);
-            EnergyCostPerMinPatch.BindConfig(settings.CostReducePerSurPct, settings.CostFloor);
-            WaterCostPerMinPatch.BindStats(stats);
-            WaterCostPerMinPatch.BindConfig(settings.CostReducePerSurPct, settings.CostFloor);
+            // 보너스 적용 = StatModifierBinder 가 game stat 시스템에 정식 Modifier 등록 (#35).
+            // 개별 stat 별 Harmony getter 패치는 폐기 (Health.MaxHealth 의 percent-damage
+            // 우회만 별도 패치).
+            var binder = StatModifierBinder.Attach(stats, settings);
 
             if (settings.AutoAllocateVit)
             {
-                // Phase 2 MVP: 이전 세션에서 분배 안 된 포인트가 있으면 전부 VIT 로 자동 투입.
                 stats.AutoAllocateVit();
-
-                // 이후 적립되는 포인트도 즉시 VIT 로 투입되도록 이벤트 구독.
                 core.Events.Subscribe<StatPointsGrantedEvent>(_ => stats.AutoAllocateVit());
             }
 
-            Instance = new QfProgression(stats, xp, settings);
+            Instance = new QfProgression(stats, xp, settings, binder);
             Instance._log.Info($"QfProgression initialized (pointsPerLevel={settings.PointsPerLevel}, autoAllocateVit={settings.AutoAllocateVit}, maxPointsPerStat={settings.MaxPointsPerStat}, allowFreeRespec={settings.AllowFreeRespec})");
             return Instance;
         }

@@ -77,17 +77,25 @@ namespace QuackForge.Loader.UI
             var entryComp = clone.GetComponent<ViewTabDisplayEntry>();
             if (entryComp != null) UnityEngine.Object.Destroy(entryComp);
 
-            // Button click 리스너 교체.
+            // Button click 리스너 교체. 게임 prefab 이 IPointerClickHandler 별도
+            // 컴포넌트를 쓰는 경우(round IT1 발견)도 있어서, Button 이 없으면 강제로
+            // 클론 root 에 Button 추가해 click 보장.
             var btn = clone.GetComponentInChildren<Button>(includeInactive: true);
-            if (btn != null)
+            if (btn == null)
             {
-                btn.onClick.RemoveAllListeners();
-                btn.onClick.AddListener(() => CharacterPanel.Instance?.Toggle());
+                // raycast target 보장용 투명 Image (이미 있으면 재사용).
+                var img = clone.GetComponent<Image>();
+                if (img == null)
+                {
+                    img = clone.AddComponent<Image>();
+                    img.color = new Color(1f, 1f, 1f, 0.01f);
+                }
+                img.raycastTarget = true;
+                btn = clone.AddComponent<Button>();
+                Log.Info("clone had no Button — injected Button + Image on root");
             }
-            else
-            {
-                Log.Warn("clone has no Button child — click won't fire (visual only)");
-            }
+            btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(() => CharacterPanel.Instance?.Toggle());
 
             // 라벨 텍스트 변경. UGUI Text + TMPro 양쪽 시도.
             UpdateLabels(clone, "Char");
