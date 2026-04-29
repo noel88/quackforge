@@ -34,6 +34,14 @@ namespace QuackForge.Progression
             xp.Subscribe();
 
             HealthMaxHealthPatch.BindStats(stats);
+            // #31 — 5종 핵심 스탯 패치 binding (STR carry / AGI×2 / PRE / SUR).
+            // 나머지 4종 (MeleeDamage / GunScatter / EnergyCost / WaterCost) 은
+            // 시그니처 추가 RE 후 후속 PR.
+            MaxWeightPatch.BindStats(stats);
+            MaxStaminaPatch.BindStats(stats);
+            CharacterMoveabilityPatch.BindStats(stats);
+            RecoilControlPatch.BindStats(stats);
+            HealGainPatch.BindStats(stats);
 
             if (autoAllocateVit)
             {
