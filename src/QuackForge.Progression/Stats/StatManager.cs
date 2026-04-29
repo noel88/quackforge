@@ -19,6 +19,10 @@ namespace QuackForge.Progression.Stats
 
         private int _unspent;
 
+        // ConfigEntry 기반 정책 (Phase 3 #34). 기본값은 PRD §7.3.1.
+        public int MaxPointsPerStat { get; set; } = 50;
+        public bool AllowFreeRespec { get; set; } = true;
+
         public StatManager(QfEventBus bus, QfSaveContext save)
         {
             _bus = bus ?? throw new ArgumentNullException(nameof(bus));
@@ -58,8 +62,14 @@ namespace QuackForge.Progression.Stats
                 _log.Warn($"Allocate({stat}, {amount}) rejected — unspent={_unspent}");
                 return false;
             }
+            var current = GetAllocated(stat);
+            if (current + amount > MaxPointsPerStat)
+            {
+                _log.Warn($"Allocate({stat}, {amount}) rejected — would exceed cap {MaxPointsPerStat} (current={current})");
+                return false;
+            }
             _unspent -= amount;
-            _allocated[stat] = GetAllocated(stat) + amount;
+            _allocated[stat] = current + amount;
             _log.Info($"allocated +{amount} to {stat} (now={_allocated[stat]}, unspent={_unspent})");
             _bus.Publish(new StatAllocatedEvent(stat, amount, _allocated[stat]));
             Persist();
@@ -69,6 +79,11 @@ namespace QuackForge.Progression.Stats
         public bool Deallocate(StatType stat, int amount)
         {
             if (amount <= 0) return false;
+            if (!AllowFreeRespec)
+            {
+                _log.Warn($"Deallocate({stat}, {amount}) rejected — AllowFreeRespec=false");
+                return false;
+            }
             var current = GetAllocated(stat);
             if (current < amount)
             {
@@ -79,6 +94,28 @@ namespace QuackForge.Progression.Stats
             _unspent += amount;
             _log.Info($"deallocated {amount} from {stat} (now={_allocated[stat]}, unspent={_unspent})");
             _bus.Publish(new StatDeallocatedEvent(stat, amount, _allocated[stat], _unspent));
+            Persist();
+            return true;
+        }
+
+        // 모든 스탯 할당 초기화 → 전부 unspent 로 환원. AllowFreeRespec 가드.
+        public bool ResetAllocation()
+        {
+            if (!AllowFreeRespec)
+            {
+                _log.Warn("ResetAllocation rejected — AllowFreeRespec=false");
+                return false;
+            }
+            int returned = 0;
+            foreach (StatType s in Enum.GetValues(typeof(StatType)))
+            {
+                returned += _allocated[s];
+                _allocated[s] = 0;
+            }
+            _unspent += returned;
+            _log.Info($"reset allocation — returned {returned} points (unspent={_unspent})");
+            foreach (StatType s in Enum.GetValues(typeof(StatType)))
+                _bus.Publish(new StatDeallocatedEvent(s, 0, 0, _unspent));
             Persist();
             return true;
         }

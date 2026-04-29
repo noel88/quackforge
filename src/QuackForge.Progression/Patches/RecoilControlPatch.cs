@@ -14,11 +14,12 @@ namespace QuackForge.Progression.Patches
     [HarmonyPatch(typeof(CharacterMainControl), nameof(CharacterMainControl.RecoilControl), MethodType.Getter)]
     public static class RecoilControlPatch
     {
-        public const float RecoilControlPerPre = 0.01f;
+        public static float RecoilControlPerPre { get; set; } = 0.01f;
 
         private static StatManager? _stats;
 
         public static void BindStats(StatManager stats) => _stats = stats;
+        public static void BindConfig(float recoilControlPerPre) => RecoilControlPerPre = recoilControlPerPre;
 
         [HarmonyPostfix]
         public static void Postfix(CharacterMainControl __instance, ref float __result)

@@ -16,11 +16,12 @@ namespace QuackForge.Progression.Patches
     [HarmonyPatch(typeof(CharacterMainControl), nameof(CharacterMainControl.CharacterMoveability), MethodType.Getter)]
     public static class CharacterMoveabilityPatch
     {
-        public const float MoveabilityPerAgiPct = 0.01f;
+        public static float MoveabilityPerAgiPct { get; set; } = 0.01f;
 
         private static StatManager? _stats;
 
         public static void BindStats(StatManager stats) => _stats = stats;
+        public static void BindConfig(float moveabilityPerAgiPct) => MoveabilityPerAgiPct = moveabilityPerAgiPct;
 
         [HarmonyPostfix]
         public static void Postfix(CharacterMainControl __instance, ref float __result)

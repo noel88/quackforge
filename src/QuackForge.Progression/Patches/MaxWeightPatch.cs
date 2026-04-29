@@ -13,11 +13,12 @@ namespace QuackForge.Progression.Patches
     [HarmonyPatch(typeof(CharacterMainControl), nameof(CharacterMainControl.MaxWeight), MethodType.Getter)]
     public static class MaxWeightPatch
     {
-        public const float WeightPerStr = 0.5f;
+        public static float WeightPerStr { get; set; } = 0.5f;
 
         private static StatManager? _stats;
 
         public static void BindStats(StatManager stats) => _stats = stats;
+        public static void BindConfig(float weightPerStr) => WeightPerStr = weightPerStr;
 
         [HarmonyPostfix]
         public static void Postfix(CharacterMainControl __instance, ref float __result)

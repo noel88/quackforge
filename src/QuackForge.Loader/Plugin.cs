@@ -41,6 +41,15 @@ namespace QuackForge.Loader
         private ConfigEntry<int> _debugAddXpAmount = null!;
         private ConfigEntry<float> _saveFlushIntervalSec = null!;
         private ConfigEntry<bool> _autoAllocateVit = null!;
+        private ConfigEntry<int> _pointsPerLevel = null!;
+        private ConfigEntry<int> _maxPointsPerStat = null!;
+        private ConfigEntry<bool> _allowFreeRespec = null!;
+        private ConfigEntry<int> _hpPerVit = null!;
+        private ConfigEntry<float> _weightPerStr = null!;
+        private ConfigEntry<float> _staminaPerAgi = null!;
+        private ConfigEntry<float> _moveabilityPerAgiPct = null!;
+        private ConfigEntry<float> _recoilControlPerPre = null!;
+        private ConfigEntry<float> _healGainPerSurPct = null!;
         private ConfigEntry<KeyboardShortcut> _characterPanelKey = null!;
 
         private void Awake()
@@ -90,6 +99,60 @@ namespace QuackForge.Loader
                 "If true, granted stat points are auto-spent on VIT (Phase 2 MVP). " +
                 "Set false to manage allocation manually via the Character panel.");
 
+            _pointsPerLevel = Config.Bind(
+                "Progression",
+                "PointsPerLevel",
+                1,
+                "Stat points granted per level-up.");
+
+            _maxPointsPerStat = Config.Bind(
+                "Progression",
+                "MaxPointsPerStat",
+                50,
+                "Hard cap on points per individual stat (PRD §7.3.1).");
+
+            _allowFreeRespec = Config.Bind(
+                "Progression",
+                "AllowFreeRespec",
+                true,
+                "If true, the Character panel [-] button can move points back to Unspent freely.");
+
+            _hpPerVit = Config.Bind(
+                "Effects",
+                "HpPerVit",
+                10,
+                "Max HP gained per VIT point.");
+
+            _weightPerStr = Config.Bind(
+                "Effects",
+                "WeightPerStr",
+                0.5f,
+                "MaxWeight gained per STR point.");
+
+            _staminaPerAgi = Config.Bind(
+                "Effects",
+                "StaminaPerAgi",
+                3f,
+                "MaxStamina gained per AGI point.");
+
+            _moveabilityPerAgiPct = Config.Bind(
+                "Effects",
+                "MoveabilityPerAgiPct",
+                0.01f,
+                "CharacterMoveability multiplier added per AGI point (0.01 = +1%).");
+
+            _recoilControlPerPre = Config.Bind(
+                "Effects",
+                "RecoilControlPerPre",
+                0.01f,
+                "RecoilControl gained per PRE point (larger value = lower recoil).");
+
+            _healGainPerSurPct = Config.Bind(
+                "Effects",
+                "HealGainPerSurPct",
+                0.05f,
+                "HealGain bonus per SUR point (0.05 = +5%).");
+
             _characterPanelKey = Config.Bind(
                 "Debug",
                 "CharacterPanelKey",
@@ -115,7 +178,19 @@ namespace QuackForge.Loader
             _harmony.PatchAll(typeof(QfProgression).Assembly);
 
             // Harmony 패치가 Progression.Patches.* 를 등록한 뒤 Progression 초기화 (순서 의존 없음).
-            Progression = QfProgression.Initialize(pointsPerLevel: 1, autoAllocateVit: _autoAllocateVit.Value);
+            Progression = QfProgression.Initialize(new ProgressionSettings
+            {
+                PointsPerLevel = _pointsPerLevel.Value,
+                AutoAllocateVit = _autoAllocateVit.Value,
+                MaxPointsPerStat = _maxPointsPerStat.Value,
+                AllowFreeRespec = _allowFreeRespec.Value,
+                HpPerVit = _hpPerVit.Value,
+                WeightPerStr = _weightPerStr.Value,
+                StaminaPerAgi = _staminaPerAgi.Value,
+                MoveabilityPerAgiPct = _moveabilityPerAgiPct.Value,
+                RecoilControlPerPre = _recoilControlPerPre.Value,
+                HealGainPerSurPct = _healGainPerSurPct.Value,
+            });
 
             // Phase 2 QA 발견:
             //   Plugin GameObject 는 Duckov 부팅 막바지에 destroy 될 수 있다.

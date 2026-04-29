@@ -15,11 +15,12 @@ namespace QuackForge.Progression.Patches
     [HarmonyPatch(typeof(global::Health), nameof(global::Health.MaxHealth), MethodType.Getter)]
     public static class HealthMaxHealthPatch
     {
-        public const int HpPerVit = 10;
+        public static int HpPerVit { get; set; } = 10;
 
         private static StatManager? _stats;
 
         public static void BindStats(StatManager stats) => _stats = stats;
+        public static void BindConfig(int hpPerVit) => HpPerVit = hpPerVit;
 
         [HarmonyPostfix]
         public static void Postfix(global::Health __instance, ref float __result)

@@ -14,11 +14,12 @@ namespace QuackForge.Progression.Patches
     [HarmonyPatch(typeof(CharacterMainControl), nameof(CharacterMainControl.HealGain), MethodType.Getter)]
     public static class HealGainPatch
     {
-        public const float HealGainPerSurPct = 0.05f;
+        public static float HealGainPerSurPct { get; set; } = 0.05f;
 
         private static StatManager? _stats;
 
         public static void BindStats(StatManager stats) => _stats = stats;
+        public static void BindConfig(float healGainPerSurPct) => HealGainPerSurPct = healGainPerSurPct;
 
         [HarmonyPostfix]
         public static void Postfix(CharacterMainControl __instance, ref float __result)
