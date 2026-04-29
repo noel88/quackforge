@@ -15,9 +15,14 @@ namespace QuackForge.Progression
         // [Effects] — 1포인트당 효과량
         public int HpPerVit { get; set; } = 10;
         public float WeightPerStr { get; set; } = 0.5f;
+        public float MeleeDamagePerStrPct { get; set; } = 0.02f;
         public float StaminaPerAgi { get; set; } = 3f;
         public float MoveabilityPerAgiPct { get; set; } = 0.01f;
         public float RecoilControlPerPre { get; set; } = 0.01f;
+        public float ScatterReducePerPrePct { get; set; } = 0.015f;
+        public float ScatterFloor { get; set; } = 0.1f;
         public float HealGainPerSurPct { get; set; } = 0.05f;
+        public float CostReducePerSurPct { get; set; } = 0.03f;
+        public float CostFloor { get; set; } = 0.1f;
     }
 }

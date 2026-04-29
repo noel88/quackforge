@@ -53,6 +53,15 @@ namespace QuackForge.Progression
             RecoilControlPatch.BindConfig(settings.RecoilControlPerPre);
             HealGainPatch.BindStats(stats);
             HealGainPatch.BindConfig(settings.HealGainPerSurPct);
+            // 잔여 4종 (#31 PR B)
+            MeleeDamageMultiplierPatch.BindStats(stats);
+            MeleeDamageMultiplierPatch.BindConfig(settings.MeleeDamagePerStrPct);
+            GunScatterMultiplierPatch.BindStats(stats);
+            GunScatterMultiplierPatch.BindConfig(settings.ScatterReducePerPrePct, settings.ScatterFloor);
+            EnergyCostPerMinPatch.BindStats(stats);
+            EnergyCostPerMinPatch.BindConfig(settings.CostReducePerSurPct, settings.CostFloor);
+            WaterCostPerMinPatch.BindStats(stats);
+            WaterCostPerMinPatch.BindConfig(settings.CostReducePerSurPct, settings.CostFloor);
 
             if (settings.AutoAllocateVit)
             {
