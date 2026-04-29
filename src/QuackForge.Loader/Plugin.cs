@@ -40,6 +40,8 @@ namespace QuackForge.Loader
         private ConfigEntry<KeyboardShortcut> _debugAddXpKey = null!;
         private ConfigEntry<int> _debugAddXpAmount = null!;
         private ConfigEntry<float> _saveFlushIntervalSec = null!;
+        private ConfigEntry<bool> _autoAllocateVit = null!;
+        private ConfigEntry<KeyboardShortcut> _characterPanelKey = null!;
 
         private void Awake()
         {
@@ -81,6 +83,20 @@ namespace QuackForge.Loader
                 15f,
                 "Interval between sidecar quackforge.json flushes (seconds).");
 
+            _autoAllocateVit = Config.Bind(
+                "Progression",
+                "AutoAllocateVit",
+                true,
+                "If true, granted stat points are auto-spent on VIT (Phase 2 MVP). " +
+                "Set false to manage allocation manually via the Character panel.");
+
+            _characterPanelKey = Config.Bind(
+                "Debug",
+                "CharacterPanelKey",
+                new KeyboardShortcut(KeyCode.U),
+                "Toggle the standalone Character panel (5-stat allocation UI). " +
+                "ViewTabs integration is a separate follow-up.");
+
             var savePath = ResolveSaveFilePath();
             QfCore.Initialize(Log, Config, savePath);
 
@@ -99,7 +115,7 @@ namespace QuackForge.Loader
             _harmony.PatchAll(typeof(QfProgression).Assembly);
 
             // Harmony 패치가 Progression.Patches.* 를 등록한 뒤 Progression 초기화 (순서 의존 없음).
-            Progression = QfProgression.Initialize(pointsPerLevel: 1, autoAllocateVit: true);
+            Progression = QfProgression.Initialize(pointsPerLevel: 1, autoAllocateVit: _autoAllocateVit.Value);
 
             // Phase 2 QA 발견:
             //   Plugin GameObject 는 Duckov 부팅 막바지에 destroy 될 수 있다.
@@ -151,6 +167,8 @@ namespace QuackForge.Loader
             {
                 DebugOverlay.Attach(runtime, Progression, QfCore.Instance!.Events);
             }
+
+            CharacterPanel.Attach(runtime, Progression, QfCore.Instance!.Events, _characterPanelKey);
 
             Log.LogInfo($"🦆 {PluginName} runtime attached (trigger={trigger}). Forging begins.");
         }
