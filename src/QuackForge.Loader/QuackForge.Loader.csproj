@@ -26,4 +26,17 @@
     <ProjectReference Include="..\QuackForge.Progression\QuackForge.Progression.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- UnityEngine.UI: UGUI Canvas/Text/Button. UnityEngine.Modules NuGet 에 미포함, 게임 제공. -->
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(DuckovManagedPath)\UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DuckovManagedPath Condition="'$(DUCKOV_MANAGED_PATH)' != ''">$(DUCKOV_MANAGED_PATH)</DuckovManagedPath>
+    <DuckovManagedPath Condition="'$(DuckovManagedPath)' == ''">$(HOME)/Library/Application Support/Steam/steamapps/common/Escape From Duckov/Duckov.app/Contents/Resources/Data/Managed</DuckovManagedPath>
+  </PropertyGroup>
+
 </Project>

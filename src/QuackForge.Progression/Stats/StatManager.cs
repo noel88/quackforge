@@ -66,6 +66,23 @@ namespace QuackForge.Progression.Stats
             return true;
         }
 
+        public bool Deallocate(StatType stat, int amount)
+        {
+            if (amount <= 0) return false;
+            var current = GetAllocated(stat);
+            if (current < amount)
+            {
+                _log.Warn($"Deallocate({stat}, {amount}) rejected — allocated={current}");
+                return false;
+            }
+            _allocated[stat] = current - amount;
+            _unspent += amount;
+            _log.Info($"deallocated {amount} from {stat} (now={_allocated[stat]}, unspent={_unspent})");
+            _bus.Publish(new StatDeallocatedEvent(stat, amount, _allocated[stat], _unspent));
+            Persist();
+            return true;
+        }
+
         // Phase 2 MVP: 누적 포인트 전부 VIT 로 자동 투입.
         public void AutoAllocateVit()
         {
@@ -130,6 +147,21 @@ namespace QuackForge.Progression.Stats
             Stat = stat;
             Amount = amount;
             AllocatedAfter = allocatedAfter;
+        }
+    }
+
+    public readonly struct StatDeallocatedEvent
+    {
+        public StatType Stat { get; }
+        public int Amount { get; }
+        public int AllocatedAfter { get; }
+        public int UnspentAfter { get; }
+        public StatDeallocatedEvent(StatType stat, int amount, int allocatedAfter, int unspentAfter)
+        {
+            Stat = stat;
+            Amount = amount;
+            AllocatedAfter = allocatedAfter;
+            UnspentAfter = unspentAfter;
         }
     }
 }
