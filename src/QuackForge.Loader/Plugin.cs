@@ -51,6 +51,11 @@ namespace QuackForge.Loader
         private ConfigEntry<float> _moveabilityPerAgiPct = null!;
         private ConfigEntry<float> _recoilControlPerPre = null!;
         private ConfigEntry<float> _healGainPerSurPct = null!;
+        private ConfigEntry<float> _meleeDamagePerStrPct = null!;
+        private ConfigEntry<float> _scatterReducePerPrePct = null!;
+        private ConfigEntry<float> _scatterFloor = null!;
+        private ConfigEntry<float> _costReducePerSurPct = null!;
+        private ConfigEntry<float> _costFloor = null!;
         private ConfigEntry<KeyboardShortcut> _characterPanelKey = null!;
 
         private void Awake()
@@ -162,6 +167,36 @@ namespace QuackForge.Loader
                 0.05f,
                 "HealGain bonus per SUR point (0.05 = +5%).");
 
+            _meleeDamagePerStrPct = Config.Bind(
+                "Effects",
+                "MeleeDamagePerStrPct",
+                0.02f,
+                "MeleeDamageMultiplier bonus per STR point (0.02 = +2%, 가산).");
+
+            _scatterReducePerPrePct = Config.Bind(
+                "Effects",
+                "ScatterReducePerPrePct",
+                0.015f,
+                "GunScatter multiplier reduction per PRE point (0.015 = -1.5%, 곱연산).");
+
+            _scatterFloor = Config.Bind(
+                "Effects",
+                "ScatterFloor",
+                0.1f,
+                "Minimum GunScatter multiplier after PRE reduction (0.1 = 90% reduction floor).");
+
+            _costReducePerSurPct = Config.Bind(
+                "Effects",
+                "CostReducePerSurPct",
+                0.03f,
+                "Energy/Water cost reduction per SUR point (0.03 = -3%, 곱연산, 음식과 물 동일).");
+
+            _costFloor = Config.Bind(
+                "Effects",
+                "CostFloor",
+                0.1f,
+                "Minimum Energy/Water cost multiplier after SUR reduction.");
+
             _characterPanelKey = Config.Bind(
                 "Debug",
                 "CharacterPanelKey",
@@ -199,6 +234,11 @@ namespace QuackForge.Loader
                 MoveabilityPerAgiPct = _moveabilityPerAgiPct.Value,
                 RecoilControlPerPre = _recoilControlPerPre.Value,
                 HealGainPerSurPct = _healGainPerSurPct.Value,
+                MeleeDamagePerStrPct = _meleeDamagePerStrPct.Value,
+                ScatterReducePerPrePct = _scatterReducePerPrePct.Value,
+                ScatterFloor = _scatterFloor.Value,
+                CostReducePerSurPct = _costReducePerSurPct.Value,
+                CostFloor = _costFloor.Value,
             });
 
             // Phase 2 QA 발견:
